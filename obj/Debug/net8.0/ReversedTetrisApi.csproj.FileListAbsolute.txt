@@ -33,3 +33,4 @@ d:\coding\ReversedTetrisApi\obj\Debug\net8.0\refint\ReversedTetrisApi.dll
 d:\coding\ReversedTetrisApi\obj\Debug\net8.0\ReversedTetrisApi.pdb
 d:\coding\ReversedTetrisApi\obj\Debug\net8.0\ReversedTetrisApi.genruntimeconfig.cache
 d:\coding\ReversedTetrisApi\obj\Debug\net8.0\ref\ReversedTetrisApi.dll
+d:\coding\ReversedTetrisApi\obj\Debug\net8.0\ReversedTetrisApi.sourcelink.json

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ReversedTetrisApi")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+17e801aa760828a7b845a24a5cffab25d4f0e84b")]
 [assembly: System.Reflection.AssemblyProductAttribute("ReversedTetrisApi")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ReversedTetrisApi")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
