@@ -7,15 +7,21 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddSignalR();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("CorsSettings",
+        builder =>
+        {
+            builder.WithOrigins("http://localhost:5173", "https://reversed-tetris.netlify.app")
+               .AllowAnyHeader()
+               .AllowAnyMethod()
+               .AllowCredentials();
+        });
+});
 
 var app = builder.Build();
 
-app.UseCors(builder => builder
-    .WithOrigins("http://localhost:5173")
-    .AllowAnyHeader()
-    .AllowAnyMethod()
-    .AllowCredentials()
-);
+app.UseCors("CorsSettings");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
