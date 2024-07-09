@@ -4,8 +4,13 @@ using System.Text.Json;
 
 public class MessageHub : Hub
 {
-    private static readonly ConcurrentDictionary<string, int> GroupCounts = new();
-    private static readonly ConcurrentDictionary<string, List<int>> GroupStatus = new();
+
+    public enum PlayerStatus
+    {
+        InGame,
+        Paused
+    }
+    private static readonly ConcurrentDictionary<string, ConcurrentDictionary<string, PlayerStatus>> GroupStatus = new();
     private static readonly ConcurrentDictionary<string, string> UserGroups = new();
 
     public class MovementData
@@ -38,35 +43,30 @@ public class MessageHub : Hub
     {
         UserGroups[Context.ConnectionId] = roomId;
         await Groups.AddToGroupAsync(Context.ConnectionId, roomId);
-        int newCount = GroupCounts.AddOrUpdate(roomId, 1, (key, oldValue) => oldValue + 1);
 
-        await Clients.Group(roomId).SendAsync("UpdateGroupCount", newCount);
-    }
+        var roomStatus = GroupStatus.GetOrAdd(roomId, _ => new ConcurrentDictionary<string, PlayerStatus>());
 
-    public async Task LeaveRoom(string roomId)
-    {
-        await Groups.RemoveFromGroupAsync(Context.ConnectionId, roomId);
+        // Add or update the status of the current connection
+        roomStatus[Context.ConnectionId] = PlayerStatus.InGame;
 
-        GroupCounts.AddOrUpdate(roomId, 0, (key, oldValue) => oldValue > 0 ? oldValue - 1 : 0);
-
-        // Notify clients about the updated group count
-        await Clients.Group(roomId).SendAsync("UpdateGroupCount", GroupCounts[roomId]);
+        await Clients.Group(roomId).SendAsync("UpdateGroupCount", roomStatus.Count);
     }
 
     public async Task Continue()
     {
         if (UserGroups.TryGetValue(Context.ConnectionId, out string? roomId))
         {
-            GroupStatus.AddOrUpdate(roomId,
-                key => [], // If the group doesn't exist, create a new empty list
-                (key, existingList) =>
-                {
-                    existingList.Remove(1);
-                    return existingList;
-                }
-            );
+            if (GroupStatus.TryGetValue(roomId, out var roomStatus))
+            {
+                roomStatus[Context.ConnectionId] = PlayerStatus.InGame;
 
-            if (GroupStatus[roomId].Count == 0) await Clients.Group("c1f7d0").SendAsync("Continue");
+                bool allPlayersInGame = roomStatus.Values.All(status => status == PlayerStatus.InGame);
+
+                if (allPlayersInGame)
+                {
+                    await Clients.Group(roomId).SendAsync("Continue");
+                }
+            }
         }
     }
 
@@ -78,35 +78,32 @@ public class MessageHub : Hub
         }
     }
 
-    public async Task Pause()
+    public async Task NotifyPause()
     {
         if (UserGroups.TryGetValue(Context.ConnectionId, out string? roomId))
         {
+            if (GroupStatus.TryGetValue(roomId, out var roomStatus))
+            {
+                roomStatus[Context.ConnectionId] = PlayerStatus.Paused;
 
-            GroupStatus.AddOrUpdate(roomId,
-               key => [1, 1],  // If the group doesn't exist, create a new list with "1"
-               (key, existingList) =>
-               {
-                   existingList.Add(1);
-                   existingList.Add(1);
-                   return existingList;
-               });
-
-            await Clients.OthersInGroup(roomId).SendAsync("Pause");
+                await Clients.OthersInGroup(roomId).SendAsync("Pause");
+            }
         }
     }
 
     public override async Task OnDisconnectedAsync(Exception exception)
     {
-        if (UserGroups.TryRemove(Context.ConnectionId, out var roomId))
+        if (UserGroups.TryRemove(Context.ConnectionId, out string? roomId))
         {
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, roomId);
 
-            GroupCounts.AddOrUpdate(roomId, 0, (key, oldValue) => oldValue > 0 ? oldValue - 1 : 0);
+            if (GroupStatus.TryGetValue(roomId, out var roomStatus))
+            {
+                roomStatus.TryRemove(Context.ConnectionId, out _);
+                await Clients.Group(roomId).SendAsync("LeaveGame");
+            }
 
-            await Clients.Group(roomId).SendAsync("UpdateGroupCount", GroupCounts[roomId]);
+            await base.OnDisconnectedAsync(exception);
         }
-
-        await base.OnDisconnectedAsync(exception);
     }
 }

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "d:\\coding\\ReversedTetrisApi\\ReversedTetrisApi.csproj": {}
+    "D:\\coding\\ReversedTetrisApi\\ReversedTetrisApi.csproj": {}
   },
   "projects": {
-    "d:\\coding\\ReversedTetrisApi\\ReversedTetrisApi.csproj": {
+    "D:\\coding\\ReversedTetrisApi\\ReversedTetrisApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "d:\\coding\\ReversedTetrisApi\\ReversedTetrisApi.csproj",
+        "projectUniqueName": "D:\\coding\\ReversedTetrisApi\\ReversedTetrisApi.csproj",
         "projectName": "ReversedTetrisApi",
-        "projectPath": "d:\\coding\\ReversedTetrisApi\\ReversedTetrisApi.csproj",
+        "projectPath": "D:\\coding\\ReversedTetrisApi\\ReversedTetrisApi.csproj",
         "packagesPath": "C:\\Users\\progr\\.nuget\\packages\\",
-        "outputPath": "d:\\coding\\ReversedTetrisApi\\obj\\",
+        "outputPath": "D:\\coding\\ReversedTetrisApi\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\progr\\AppData\\Roaming\\NuGet\\NuGet.Config",
