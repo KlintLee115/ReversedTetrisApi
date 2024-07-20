@@ -12,7 +12,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("CorsSettings",
         builder =>
         {
-            builder.WithOrigins("http://10.187.162.67:5173", "https://reversed-tetris.netlify.app")
+            builder.WithOrigins("http://10.187.162.67:5173", "https://reversed-tetris.netlify.app", "http://localhost:3000")
                .AllowAnyHeader()
                .AllowAnyMethod()
                .AllowCredentials();
@@ -22,11 +22,7 @@ builder.Services.AddCors(options =>
 // Configure Kestrel to listen on all network interfaces
 builder.WebHost.ConfigureKestrel(serverOptions =>
 {
-    serverOptions.ListenAnyIP(5159); // HTTP port
-    serverOptions.ListenAnyIP(7092, listenOptions =>
-    {
-        listenOptions.UseHttps(); // HTTPS port
-    });
+    serverOptions.ListenAnyIP(8080); // HTTP port
 });
 
 var app = builder.Build();
