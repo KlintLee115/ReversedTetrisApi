@@ -1,3 +1,5 @@
+using ReversedTetrisApi;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -12,7 +14,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("CorsSettings",
         builder =>
         {
-            builder.WithOrigins("http://10.187.162.67:5173", "https://reversed-tetris.netlify.app", "http://localhost:3000")
+            builder.WithOrigins("http://localhost:5173", "https://reversed-tetris.netlify.app", "http://localhost:3000")
                .AllowAnyHeader()
                .AllowAnyMethod()
                .AllowCredentials();
