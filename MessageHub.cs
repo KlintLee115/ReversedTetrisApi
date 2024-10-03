@@ -10,7 +10,8 @@ namespace ReversedTetrisApi
         public enum PlayerStatus
         {
             InGame,
-            Paused
+            Paused,
+            ReadyToBegin
         }
         private static readonly ConcurrentDictionary<string, ConcurrentDictionary<string, PlayerStatus>> GroupStatus = new();
         private static readonly ConcurrentDictionary<string, string> UserGroups = new();
@@ -43,29 +44,63 @@ namespace ReversedTetrisApi
 
         public async Task JoinRoom(string roomId)
         {
-            UserGroups[Context.ConnectionId] = roomId;
-            await Groups.AddToGroupAsync(Context.ConnectionId, roomId);
 
             var roomStatus = GroupStatus.GetOrAdd(roomId, _ => new ConcurrentDictionary<string, PlayerStatus>());
 
-            // Add or update the status of the current connection
-            roomStatus[Context.ConnectionId] = PlayerStatus.InGame;
+            if (roomStatus.Any(s => s.Value != PlayerStatus.ReadyToBegin))
+            {
+                await Clients.Caller.SendAsync("GameStarted", "The game has already started. You cannot join.");
+                return;
+            }
 
-            await Clients.Group(roomId).SendAsync("UpdateGroupCount", roomStatus.Count);
+            UserGroups[Context.ConnectionId] = roomId;
+            await Groups.AddToGroupAsync(Context.ConnectionId, roomId);
+
+            if (roomStatus.IsEmpty)
+            {
+                // If no one is in the room, set the current player's status to "WaitingToStart"
+                roomStatus[Context.ConnectionId] = PlayerStatus.ReadyToBegin;
+            }
+            else
+            {
+                // If someone is in the room, check their status
+                var otherPlayerStatus = roomStatus.FirstOrDefault().Value;
+
+                if (otherPlayerStatus == PlayerStatus.ReadyToBegin)
+                {
+                    roomStatus[Context.ConnectionId] = PlayerStatus.InGame;
+
+                    var otherPlayerId = roomStatus.First().Key;
+                    roomStatus[otherPlayerId] = PlayerStatus.InGame;
+
+                    // Notify that the game should start
+                    await Clients.Group(roomId).SendAsync("GameShouldStart");
+                }
+                else
+                {
+                    // If the other player is not "WaitingToStart", set self to "InGame" without starting the game
+                    roomStatus[Context.ConnectionId] = PlayerStatus.ReadyToBegin;
+
+                }
+            }
         }
 
-        public async Task Continue()
+        public async Task RequestContinue()
         {
             if (UserGroups.TryGetValue(Context.ConnectionId, out string? roomId))
             {
                 if (GroupStatus.TryGetValue(roomId, out var roomStatus))
                 {
-                    roomStatus[Context.ConnectionId] = PlayerStatus.InGame;
+                    roomStatus[Context.ConnectionId] = PlayerStatus.ReadyToBegin;
 
-                    bool allPlayersInGame = roomStatus.Values.All(status => status == PlayerStatus.InGame);
+                    bool allPlayersReady = roomStatus.Values.All(status => status == PlayerStatus.ReadyToBegin);
 
-                    if (allPlayersInGame)
+                    if (allPlayersReady)
                     {
+                        foreach (var playerId in roomStatus.Keys)
+                        {
+                            roomStatus[playerId] = PlayerStatus.InGame;
+                        }
                         await Clients.Group(roomId).SendAsync("Continue");
                     }
                 }
