@@ -74,7 +74,7 @@ namespace ReversedTetrisApi
                     roomStatus[otherPlayerId] = PlayerStatus.InGame;
 
                     // Notify that the game should start
-                    await Clients.Group(roomId).SendAsync("GameShouldStart");
+                    await Clients.Group(roomId).SendAsync("PreGameCountdownShouldStart");
                 }
                 else
                 {
