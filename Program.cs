@@ -1,4 +1,7 @@
+using dotenv.net;
 using ReversedTetrisApi;
+
+DotEnv.Load();
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,22 +12,27 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddSignalR();
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsSettings",
         builder =>
         {
-            builder.WithOrigins("http://localhost:5173", "https://reversed-tetris.netlify.app", "http://localhost:3000")
-               .AllowAnyHeader()
-               .AllowAnyMethod()
-               .AllowCredentials();
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
+            {
+                builder.WithOrigins("http://10.187.137.241:5173") // Your frontend URL
+                   .AllowAnyHeader()
+                   .AllowAnyMethod()
+                   .AllowCredentials(); 
+            }
+            else
+            {
+                builder.WithOrigins("https://reversed-tetris.netlify.app")
+                   .AllowAnyHeader()
+                   .AllowAnyMethod()
+                   .AllowCredentials();
+            }
         });
-});
-
-// Configure Kestrel to listen on all network interfaces
-builder.WebHost.ConfigureKestrel(serverOptions =>
-{
-    serverOptions.ListenAnyIP(8080); // HTTP port
 });
 
 var app = builder.Build();
@@ -42,6 +50,11 @@ app.UseHttpsRedirection();
 
 app.MapControllers();
 app.MapHub<MessageHub>("/MessageHub");
+
+app.MapGet("/", () =>
+{
+    return "wqdqwd";
+});
 
 app.MapGet("/roomId", () =>
 {

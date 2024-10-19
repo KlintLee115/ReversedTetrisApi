@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Coding\\Projects\\ReversedTetrisApi\\ReversedTetrisApi.csproj": {}
+    "C:\\Coding\\Projects\\ReversedTetrisApi\\ReversedTetrisApi.csproj": {}
   },
   "projects": {
-    "c:\\Coding\\Projects\\ReversedTetrisApi\\ReversedTetrisApi.csproj": {
+    "C:\\Coding\\Projects\\ReversedTetrisApi\\ReversedTetrisApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Coding\\Projects\\ReversedTetrisApi\\ReversedTetrisApi.csproj",
+        "projectUniqueName": "C:\\Coding\\Projects\\ReversedTetrisApi\\ReversedTetrisApi.csproj",
         "projectName": "ReversedTetrisApi",
-        "projectPath": "c:\\Coding\\Projects\\ReversedTetrisApi\\ReversedTetrisApi.csproj",
+        "projectPath": "C:\\Coding\\Projects\\ReversedTetrisApi\\ReversedTetrisApi.csproj",
         "packagesPath": "C:\\Users\\klint\\.nuget\\packages\\",
-        "outputPath": "c:\\Coding\\Projects\\ReversedTetrisApi\\obj\\",
+        "outputPath": "C:\\Coding\\Projects\\ReversedTetrisApi\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\klint\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -54,6 +54,10 @@
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.4.0, )"
+            },
+            "dotenv.net": {
+              "target": "Package",
+              "version": "[3.2.1, )"
             }
           },
           "imports": [

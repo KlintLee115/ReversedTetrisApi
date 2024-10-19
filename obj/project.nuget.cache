@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "vCRdqHYP6jo=",
+  "dgSpecHash": "8krY79TEgYg=",
   "success": true,
-  "projectFilePath": "c:\\Coding\\Projects\\ReversedTetrisApi\\ReversedTetrisApi.csproj",
+  "projectFilePath": "C:\\Coding\\Projects\\ReversedTetrisApi\\ReversedTetrisApi.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\klint\\.nuget\\packages\\dotenv.net\\3.2.1\\dotenv.net.3.2.1.nupkg.sha512",
     "C:\\Users\\klint\\.nuget\\packages\\microsoft.aspnetcore.authentication.abstractions\\2.2.0\\microsoft.aspnetcore.authentication.abstractions.2.2.0.nupkg.sha512",
     "C:\\Users\\klint\\.nuget\\packages\\microsoft.aspnetcore.authorization\\2.2.0\\microsoft.aspnetcore.authorization.2.2.0.nupkg.sha512",
     "C:\\Users\\klint\\.nuget\\packages\\microsoft.aspnetcore.authorization.policy\\2.2.0\\microsoft.aspnetcore.authorization.policy.2.2.0.nupkg.sha512",
