@@ -20,7 +20,7 @@ builder.Services.AddCors(options =>
         {
             if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
             {
-                builder.WithOrigins("http://10.187.137.241:5173") // Your frontend URL
+                builder.WithOrigins("http://localhost:5173") // Your frontend URL
                    .AllowAnyHeader()
                    .AllowAnyMethod()
                    .AllowCredentials(); 
