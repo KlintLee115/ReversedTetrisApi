@@ -1,1 +1,42 @@
-.env
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+
+# Configuration and secrets
+*.env
+*.env.local
+appsettings.Development.json
+appsettings.*.json
+!appsettings.json
+
+# IDE - Visual Studio and VS Code
+.vs/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.user
+*.suo
+*.userprefs
+
+# Logs and debugging
+backend/[Ll]ogs/
+*.log
+npm-debug.log*
+
+# Dependencies
+*.nuget.props
+*.nuget.targets
+
+# OS generated files
+.DS_Store
+._*
+Thumbs.db
+Desktop.ini
+
+# Temporary files
+*~
+*.swp
+*.bak
