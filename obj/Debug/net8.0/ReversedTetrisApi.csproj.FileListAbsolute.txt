@@ -70,3 +70,7 @@ c:\Coding\Projects\ReversedTetrisApi\obj\Debug\net8.0\refint\ReversedTetrisApi.d
 c:\Coding\Projects\ReversedTetrisApi\obj\Debug\net8.0\ReversedTetrisApi.pdb
 c:\Coding\Projects\ReversedTetrisApi\obj\Debug\net8.0\ReversedTetrisApi.genruntimeconfig.cache
 c:\Coding\Projects\ReversedTetrisApi\obj\Debug\net8.0\ref\ReversedTetrisApi.dll
+C:\Coding\Projects\ReversedTetrisApi\bin\Debug\net8.0\ReversedTetrisApi.staticwebassets.endpoints.json
+C:\Coding\Projects\ReversedTetrisApi\bin\Debug\net8.0\dotenv.net.dll
+C:\Coding\Projects\ReversedTetrisApi\obj\Debug\net8.0\staticwebassets.build.endpoints.json
+C:\Coding\Projects\ReversedTetrisApi\obj\Debug\net8.0\staticwebassets\msbuild.ReversedTetrisApi.Microsoft.AspNetCore.StaticWebAssetEndpoints.props

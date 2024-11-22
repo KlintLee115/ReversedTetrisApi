@@ -3,6 +3,7 @@
 [Dd]ebug/
 [Rr]elease/
 
+
 # Configuration and secrets
 *.env
 *.env.local
