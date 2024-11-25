@@ -1,10 +1,17 @@
-public class RoomManager
+namespace ReversedTetrisApi;
+
+public static class RoomManager
 {
-    public static readonly HashSet<string> usedRoomIds = [];
-    public static string GenerateRoomId()
+    public static readonly HashSet<string> UsedRoomIds = [];
+
+    public static string GenerateUniqueRoomId()
     {
-        // Generate a unique room ID based on your requirements
-        // Example: You can use GUIDs or generate based on timestamp or random numbers
-        return Guid.NewGuid().ToString()[..6]; // Example using GUIDs
+        string roomId;
+        do
+        {
+            roomId = Guid.NewGuid().ToString("N")[..6]; // Generate a 6-character unique ID
+        } while (!UsedRoomIds.Add(roomId)); // Add returns false if the ID already exists
+
+        return roomId;
     }
 }

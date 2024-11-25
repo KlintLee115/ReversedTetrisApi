@@ -9,29 +9,16 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-builder.Services.AddControllersWithViews();
 builder.Services.AddSignalR();
 
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsSettings",
-        builder =>
+        corsBuilder =>
         {
-            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
-            {
-                builder.WithOrigins("http://localhost:5173") // Your frontend URL
-                   .AllowAnyHeader()
-                   .AllowAnyMethod()
-                   .AllowCredentials(); 
-            }
-            else
-            {
-                builder.WithOrigins("https://reversed-tetris.netlify.app")
-                   .AllowAnyHeader()
-                   .AllowAnyMethod()
-                   .AllowCredentials();
-            }
+            corsBuilder.WithOrigins(builder.Environment.IsDevelopment()
+                ? "http://localhost:5173"
+                : "https://reversed-tetris.netlify.app");
         });
 });
 
@@ -47,24 +34,13 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
-app.MapControllers();
 app.MapHub<MessageHub>("/MessageHub");
 
-app.MapGet("/", () =>
-{
-    return "wqdqwd";
-});
+app.MapGet("/", () => "hey");
 
 app.MapGet("/roomId", () =>
 {
-    string roomId;
-    do
-    {
-        roomId = RoomManager.GenerateRoomId();
-    } while (RoomManager.usedRoomIds.Contains(roomId));
-
-    RoomManager.usedRoomIds.Add(roomId);
+    var roomId = RoomManager.GenerateUniqueRoomId();
     return roomId;
 });
 

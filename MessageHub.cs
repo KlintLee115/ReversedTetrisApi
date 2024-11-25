@@ -6,8 +6,7 @@ namespace ReversedTetrisApi
 {
     public class MessageHub : Hub
     {
-
-        public enum PlayerStatus
+        private enum PlayerStatus
         {
             InGame,
             Paused,
@@ -16,11 +15,11 @@ namespace ReversedTetrisApi
         private static readonly ConcurrentDictionary<string, ConcurrentDictionary<string, PlayerStatus>> GroupStatus = new();
         private static readonly ConcurrentDictionary<string, string> UserGroups = new();
 
-        public class MovementData
+        public struct MovementData
         {
-            public required List<List<int>> PrevCoor { get; set; }
-            public required List<List<int>> NewCoor { get; set; }
-            public required string Color { get; set; }
+            public required List<List<int>> PrevCoor { get; init; }
+            public required List<List<int>> NewCoor { get; init; }
+            public required string Color { get; init; }
         }
         public async Task SendMovement(string data)
         {
@@ -87,13 +86,13 @@ namespace ReversedTetrisApi
 
         public async Task RequestContinue()
         {
-            if (UserGroups.TryGetValue(Context.ConnectionId, out string? roomId))
+            if (UserGroups.TryGetValue(Context.ConnectionId, out var roomId))
             {
                 if (GroupStatus.TryGetValue(roomId, out var roomStatus))
                 {
                     roomStatus[Context.ConnectionId] = PlayerStatus.ReadyToBegin;
 
-                    bool allPlayersReady = roomStatus.Values.All(status => status == PlayerStatus.ReadyToBegin);
+                    var allPlayersReady = roomStatus.Values.All(status => status == PlayerStatus.ReadyToBegin);
 
                     if (allPlayersReady)
                     {
@@ -109,7 +108,7 @@ namespace ReversedTetrisApi
 
         public async Task GameOver()
         {
-            if (UserGroups.TryGetValue(Context.ConnectionId, out string? roomId))
+            if (UserGroups.TryGetValue(Context.ConnectionId, out var roomId))
             {
                 await Clients.OthersInGroup(roomId).SendAsync("You Won");
             }
@@ -117,7 +116,7 @@ namespace ReversedTetrisApi
 
         public async Task NotifyPause()
         {
-            if (UserGroups.TryGetValue(Context.ConnectionId, out string? roomId))
+            if (UserGroups.TryGetValue(Context.ConnectionId, out var roomId))
             {
                 if (GroupStatus.TryGetValue(roomId, out var roomStatus))
                 {
@@ -132,7 +131,7 @@ namespace ReversedTetrisApi
 
         public override async Task OnDisconnectedAsync(Exception? exception)
         {
-            if (UserGroups.TryRemove(Context.ConnectionId, out string? roomId))
+            if (UserGroups.TryRemove(Context.ConnectionId, out var roomId))
             {
                 await Groups.RemoveFromGroupAsync(Context.ConnectionId, roomId);
 
